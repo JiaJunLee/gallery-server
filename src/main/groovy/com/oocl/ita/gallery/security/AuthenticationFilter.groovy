@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse
 class AuthenticationFilter extends BasicHttpAuthenticationFilter {
 
     private static final List<String> IGNORE_PATH = [
+            '/user/register',
             '/user/login',
             '/user/denied'
     ]
