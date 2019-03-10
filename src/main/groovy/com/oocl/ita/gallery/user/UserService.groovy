@@ -28,7 +28,7 @@ class UserService extends BaseService<User, String> {
         if (userRepository.findByUsername(user.username) == null) {
             this.save(user)
         } else {
-            throw new RuntimeException()
+            user = null
         }
         return user
     }
