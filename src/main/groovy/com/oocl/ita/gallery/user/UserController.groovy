@@ -1,8 +1,6 @@
 package com.oocl.ita.gallery.user
 
-import com.oocl.ita.gallery.common.constants.ErrorMsgConstants
 import com.oocl.ita.gallery.security.utils.HMAC
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -29,7 +27,6 @@ class UserController {
                 password: HMAC.digest(user.password, hsKey, HMAC.HMAC_SHA512),
                 type: User.UserType.PUBLIC
         )
-        return userService.createUser(userDB) != null ?
-                new ResponseEntity("", HttpStatus.CREATED) : new ResponseEntity(ErrorMsgConstants.REG_FAIL_CONFLICT_USERNAME, HttpStatus.OK)
+        return new ResponseEntity(userService.createUser(userDB), HttpStatus.CREATED);
     }
 }

@@ -1,5 +1,6 @@
 package com.oocl.ita.gallery.security
 
+import com.oocl.ita.gallery.common.constants.ErrorMsgConstants
 import com.oocl.ita.gallery.security.utils.JWT
 import com.oocl.ita.gallery.user.User
 import com.oocl.ita.gallery.user.UserService
@@ -33,7 +34,7 @@ class AuthenticationAop {
             String jwtToken = request?.getCookies()?.find { it?.name == 'token' }?.value
             User user = userService.findByUsername(jwt.getUsername(jwtToken))
             if (!jwtToken || user?.type != authenticationAnnotation.type()) {
-                throw new AuthenticationException('User cannot access')
+                throw new AuthenticationException(ErrorMsgConstants.AUTH_NO_ACCESS)
             }
         }
         return joinPoint.proceed()
