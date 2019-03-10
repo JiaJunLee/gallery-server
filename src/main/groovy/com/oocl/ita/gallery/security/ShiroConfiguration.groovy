@@ -1,5 +1,6 @@
 package com.oocl.ita.gallery.security
 
+import com.google.common.collect.Maps
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator
 import org.apache.shiro.mgt.DefaultSubjectDAO
 import org.apache.shiro.spring.LifecycleBeanPostProcessor
@@ -36,12 +37,12 @@ class ShiroConfiguration {
     @Bean("shiroFilter")
     ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean()
-        Map<String, Filter> filterMap = new HashMap<>()
+        Map<String, Filter> filterMap = Maps.newHashMap()
         filterMap.put("AuthenticationFilter", new AuthenticationFilter())
         factoryBean.setFilters(filterMap)
         factoryBean.setSecurityManager(securityManager)
 
-        Map<String, String> filterRuleMap = new HashMap<>()
+        Map<String, String> filterRuleMap = Maps.newHashMap()
         filterRuleMap.put("/**", "AuthenticationFilter")
         factoryBean.setFilterChainDefinitionMap(filterRuleMap)
         return factoryBean

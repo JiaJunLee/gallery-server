@@ -27,13 +27,12 @@ class AuthenticationAop {
     Object checkUserType(ProceedingJoinPoint joinPoint) {
         Method method = joinPoint.getSignature().getDeclaringType().getDeclaredMethods().find { it.name == joinPoint.getSignature().name }
         if (method?.isAnnotationPresent(AuthenticationAnnotation)) {
-            AuthenticationAnnotation authenticationAnnotation = method.getAnnotation(AuthenticationAnnotation)
             RequestAttributes ra = RequestContextHolder.getRequestAttributes()
             ServletRequestAttributes sra = (ServletRequestAttributes) ra
             HttpServletRequest request = sra.getRequest()
             String jwtToken = request?.getCookies()?.find { it?.name == 'token' }?.value
             User user = userService.findByUsername(jwt.getUsername(jwtToken))
-            if (!jwtToken || user?.type != authenticationAnnotation.type()) {
+            if (!jwtToken || user?.type != method.getAnnotation(AuthenticationAnnotation).type()) {
                 throw new AuthenticationException(ErrorMsgConstants.AUTH_NO_ACCESS)
             }
         }
