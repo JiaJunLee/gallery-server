@@ -7,8 +7,16 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document('user')
 class User extends BaseDocument{
 
+    static final enum UserType {
+        ADMINISTRATOR,
+        PUBLIC
+    }
+
     @Field('username')
     String username
+
+    @Field('hs_key')
+    String hsKey
 
     @Field('password')
     String password
@@ -20,6 +28,14 @@ class User extends BaseDocument{
     Integer gender = 0
 
     @Field('type')
-    Integer type = 0
+    UserType type
+
+    boolean isAdministrator() {
+        return this.type == UserType.ADMINISTRATOR
+    }
+
+    boolean isPublic() {
+        return this.type == UserType.PUBLIC
+    }
 
 }
