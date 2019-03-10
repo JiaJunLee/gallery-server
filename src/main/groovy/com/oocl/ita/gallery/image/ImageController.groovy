@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping
  *
  * ImageController
  *
- * @author Burgess Li
  * @date 3/10/2019 11:21 AM
  * @version 1.0
  *
