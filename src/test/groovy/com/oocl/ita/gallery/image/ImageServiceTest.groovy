@@ -10,8 +10,9 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner)
 @SpringBootTest
 class ImageServiceTest{
-    @Autowired
-    ImageService imageService
+
+    @Autowired ImageService imageService
+
     @Test
     void should_return_not_null_when_get_repository(){
         Assert.assertNotNull(imageService.getRepository())
