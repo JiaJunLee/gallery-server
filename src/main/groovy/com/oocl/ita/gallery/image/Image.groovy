@@ -31,6 +31,6 @@ class Image extends BaseDocument {
 
     @DBRef
     @Field('user_ref')
-    User user
+    User uploadUser
 
 }

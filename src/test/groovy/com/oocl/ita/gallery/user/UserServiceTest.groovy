@@ -1,6 +1,6 @@
-package com.oocl.ita.gallery.image
+package com.oocl.ita.gallery.user
 
-import org.junit.Assert
+import io.jsonwebtoken.lang.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,15 +9,12 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner)
 @SpringBootTest
-class ImageServiceTest{
-
-    @Autowired ImageService imageService
+class UserServiceTest {
+    @Autowired
+    UserService userService
 
     @Test
-    void should_return_not_null_when_get_repository(){
-        Assert.assertNotNull(imageService.getRepository())
+    void should_return_user_when_findAllByType_given_user_type_administrator() {
+        Assert.notNull(userService.findAllByType(User.UserType.ADMINISTRATOR))
     }
-
 }
-
-
