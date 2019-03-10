@@ -13,7 +13,7 @@ class UserService extends BaseService<User, String> {
 
     @Override
     PagingAndSortingRepository<User, String> getRepository() {
-        return this.userRepository;
+        return this.userRepository
     }
 
     List<User> findAllByType(User.UserType type) {
