@@ -21,4 +21,5 @@ class User extends BaseDocument{
 
     @Field('type')
     Integer type = 0
+
 }

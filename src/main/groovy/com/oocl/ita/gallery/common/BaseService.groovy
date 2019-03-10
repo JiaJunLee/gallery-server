@@ -14,6 +14,11 @@ abstract class BaseService<T, ID> {
 
     abstract PagingAndSortingRepository<T, ID> getRepository()
 
+    boolean isExists(ID id) {
+        Optional<T> optional = getRepository().findById(id)
+        return optional != null && optional.isPresent()
+    }
+
     T findById(ID id) {
         Optional<T> optional = getRepository().findById(id)
         if (optional != null && optional.isPresent()) {

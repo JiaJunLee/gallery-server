@@ -1,6 +1,8 @@
 package com.oocl.ita.gallery.image
 
 import com.oocl.ita.gallery.common.BaseDocument
+import com.oocl.ita.gallery.user.User
+import org.springframework.data.mongodb.core.mapping.DBRef
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 
@@ -26,5 +28,9 @@ class Image extends BaseDocument {
 
     @Field('image_height')
     Integer imageHeight = 0
+
+    @DBRef
+    @Field('user_ref')
+    User user
 
 }
