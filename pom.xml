@@ -12,6 +12,7 @@
 	<artifactId>gallery</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gallery</name>
+  <packaging>war</packaging>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -42,6 +43,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
+    </dependency>
 	</dependencies>
 
 	<build>
@@ -69,6 +75,20 @@
 					</execution>
 				</executions>
 			</plugin>
+
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <!-- 注意此处的url,它的值就是第一步中的tomcat发布应用管理页面地址 -->
+          <url>http://localhost:8080/manager/text</url>
+          <server>tomcat7</server> <!-- 此处的名字必须和setting.xml中配置的ID一致 -->
+          <username>admin</username>
+          <password>admin</password>
+          <path>/gallery</path>
+        </configuration>
+      </plugin>
 		</plugins>
 	</build>
 
