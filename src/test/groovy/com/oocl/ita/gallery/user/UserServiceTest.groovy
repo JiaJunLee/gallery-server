@@ -17,15 +17,15 @@ import static org.powermock.api.support.membermodification.MemberModifier.suppre
 class UserServiceTest {
 
     @InjectMocks
-    private UserService userService = new UserService();
+    private UserService userService = new UserService()
 
     @Mock
-    private UserRepository userRepository;
+    private UserRepository userRepository
 
 
     @Before
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.initMocks(this)
         Mockito.when(userRepository.findAllByType(Mockito.eq(User.UserType.PUBLIC))).thenReturn(Lists.newArrayList())
         Mockito.when(userRepository.findByUsername(Mockito.eq("b"))).thenReturn(new User())
         Mockito.when(userRepository.findByUsername(Mockito.eq("a"))).thenReturn(null)
@@ -34,7 +34,7 @@ class UserServiceTest {
     @Test
     void should_return_userRepository_when_getRepository() {
         //When
-        UserRepository userRepository1 = userService.getRepository();
+        UserRepository userRepository1 = userService.getRepository()
 
         //Then
         Assert.assertNotNull(userRepository1)
@@ -75,7 +75,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void should_return_user_not_null_when_createuser_given_user_name_a() {
+    void should_return_user_not_null_when_createuser_given_user_name_a() {
         //Given
         suppress(MemberMatcher.methodsDeclaredIn(BaseService.class))
         User user = new User(username: "a", nickname: "A", gender: 1, hsKey: "key",
@@ -89,13 +89,13 @@ class UserServiceTest {
     }
 
     @Test(expected = DuplicatedUserException.class)
-    public void should_catch_DuplicatedUserException_when_create_given_user_name_b() {
+    void should_catch_DuplicatedUserException_when_create_given_user_name_b() {
         //Given
         suppress(MemberMatcher.methodsDeclaredIn(BaseService.class))
         User user = new User(username: "b", nickname: "B", gender: 1, hsKey: "key",
                 password: "pwd", type: User.UserType.PUBLIC)
 
         //When
-        User userDB = userService.createUser(user)
+        userService.createUser(user)
     }
 }
