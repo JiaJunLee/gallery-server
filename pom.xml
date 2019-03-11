@@ -98,7 +98,6 @@
 				<configuration>
 					<argLine>-Dfile.encoding=UTF-8 -Xmx1024m -XX:MaxPermSize=256m</argLine>
 					<skipTests>false</skipTests>
-					<testFailureIgnore>true</testFailureIgnore>
 					<forkMode>once</forkMode>
 				</configuration>
 			</plugin>
