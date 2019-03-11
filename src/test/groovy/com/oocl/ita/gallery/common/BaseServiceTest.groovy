@@ -18,7 +18,6 @@ import spock.lang.Unroll
  * @version 1.0
  *
  */
-@SpringBootTest(classes = GalleryApplication)
 class BaseServiceTest extends Specification {
 
     static BaseService baseService
@@ -46,7 +45,7 @@ class BaseServiceTest extends Specification {
     }
 
     @Unroll
-    def 'should return #result when exists database record id: #id'() {
+    def 'should return #isExists when exists database record id: #id'() {
         expect:
         isExists == baseService.isExists(id)
 
