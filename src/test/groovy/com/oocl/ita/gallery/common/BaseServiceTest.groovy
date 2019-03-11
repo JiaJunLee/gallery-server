@@ -1,16 +1,13 @@
 package groovy.com.oocl.ita.gallery.common
 
 import com.oocl.ita.gallery.GalleryApplication
+import com.oocl.ita.gallery.common.BaseDocument
 import com.oocl.ita.gallery.common.BaseService
 import com.oocl.ita.gallery.common.DefaultBaseService
-import com.oocl.ita.gallery.image.Image
-import com.oocl.ita.gallery.image.ImageRepository
-import com.oocl.ita.gallery.image.ImageService
-import com.sun.xml.internal.bind.v2.model.core.ID
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.PagingAndSortingRepository
 import spock.lang.Specification
-import spock.lang.Unroll;
+import spock.lang.Unroll
 
 /**
  *
@@ -22,42 +19,86 @@ import spock.lang.Unroll;
  *
  */
 @SpringBootTest(classes = GalleryApplication)
-class BaseServiceTest<T, ID> extends Specification {
+class BaseServiceTest extends Specification {
 
     static BaseService baseService
+    static Map<String, Object> inputMap
+    static Map<String, Object> outputMap
 
     def setupSpec() {
+        inputMap = [
+                'FIND': new BaseDocument(id: 'ID'),
+                'SAVE': new BaseDocument(),
+                'SAVE_ALL': [new BaseDocument(), new BaseDocument()]
+        ]
+        outputMap = [
+                'FIND': new BaseDocument(id: 'ID'),
+                'SAVE': new BaseDocument(id: 'NEW_ID'),
+                'SAVE_ALL': [new BaseDocument(id: 'ID_1'), new BaseDocument(id: 'ID_2')]
+        ]
         baseService = new DefaultBaseService(
                 pagingAndSortingRepository: Stub(PagingAndSortingRepository.class) {
-                    findById('ID') >> new Optional(new Object())
+                    findById(inputMap['FIND'].id) >> new Optional(outputMap['FIND'])
+                    save(inputMap['SAVE']) >> outputMap['SAVE']
+                    saveAll(inputMap['SAVE_ALL']) >> outputMap['SAVE_ALL']
                 }
         )
     }
 
     @Unroll
     def 'should return #result when exists database record id: #id'() {
-        when:
-        boolean exists = baseService.isExists(id)
-
-        then:
-        exists == result
+        expect:
+        isExists == baseService.isExists(id)
 
         where:
-        id                  |   result
+        id                  |   isExists
         'ID'                |   true
         'ID_NOT_EXISTS'     |   false
     }
 
-//    def 'should return object with ID when save object'() {
-//        given:
-//        Object object = new Object()
-//
-//        when:
-//        Object resultObject = getBaseService().save(object)
-//
-//        then:
-//        resultObject != null
-//        resultObject.getAt('id') != null
-//    }
+    @Unroll
+    def 'should return document when find by id: #id'() {
+        expect:
+        result == (BaseDocument) baseService.findById(id)
+
+        where:
+        id                  |   result
+        'ID'                |   outputMap['FIND']
+        'ID_NOT_EXISTS'     |   null
+    }
+
+    def 'should return document with id when save document'() {
+        given:
+        BaseDocument document = inputMap['SAVE']
+
+        when:
+        BaseDocument resultDocument = (BaseDocument) baseService.save(document)
+
+        then:
+        resultDocument != null
+        resultDocument.id != null
+    }
+
+    def 'should return all documents with id when save all documents'() {
+        given:
+        List documents = inputMap['SAVE_ALL']
+
+        when:
+        List resultDocuments = baseService.saveAll(documents)
+
+        then:
+        resultDocuments != null
+        resultDocuments.every { BaseDocument document -> document.id != null }
+    }
+
+    def 'should return true when delete document'() {
+        expect:
+        baseService.deleteById('ID')
+    }
+
+    def 'should return true when delete all documents'() {
+        expect:
+        baseService.deleteAll(['ID_1', 'ID_2'])
+    }
 
 }
