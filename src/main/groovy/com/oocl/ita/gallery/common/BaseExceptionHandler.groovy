@@ -19,7 +19,7 @@ class BaseExceptionHandler {
     @ExceptionHandler
     @ResponseBody
     ResponseEntity handleException(Exception e) {
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        return new ResponseEntity<String>(e.getCause().getMessage(),HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
 }

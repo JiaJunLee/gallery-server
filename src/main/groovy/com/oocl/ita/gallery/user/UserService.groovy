@@ -1,6 +1,8 @@
 package com.oocl.ita.gallery.user
 
 import com.oocl.ita.gallery.common.BaseService
+import com.oocl.ita.gallery.common.constants.ErrorMsgConstants
+import com.oocl.ita.gallery.user.exception.DuplicatedUserException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Service
@@ -28,7 +30,7 @@ class UserService extends BaseService<User, String> {
         if (userRepository.findByUsername(user.username) == null) {
             this.save(user)
         } else {
-            user = null
+            throw new DuplicatedUserException(ErrorMsgConstants.REG_FAIL_CONFLICT_USERNAME)
         }
         return user
     }

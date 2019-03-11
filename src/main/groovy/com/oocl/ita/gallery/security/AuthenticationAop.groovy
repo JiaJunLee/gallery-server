@@ -1,5 +1,6 @@
 package com.oocl.ita.gallery.security
 
+import com.oocl.ita.gallery.common.constants.ErrorMsgConstants
 import com.oocl.ita.gallery.security.utils.JWT
 import com.oocl.ita.gallery.user.User
 import com.oocl.ita.gallery.user.UserService
@@ -26,14 +27,13 @@ class AuthenticationAop {
     Object checkUserType(ProceedingJoinPoint joinPoint) {
         Method method = joinPoint.getSignature().getDeclaringType().getDeclaredMethods().find { it.name == joinPoint.getSignature().name }
         if (method?.isAnnotationPresent(AuthenticationAnnotation)) {
-            AuthenticationAnnotation authenticationAnnotation = method.getAnnotation(AuthenticationAnnotation)
             RequestAttributes ra = RequestContextHolder.getRequestAttributes()
             ServletRequestAttributes sra = (ServletRequestAttributes) ra
             HttpServletRequest request = sra.getRequest()
             String jwtToken = request?.getCookies()?.find { it?.name == 'token' }?.value
             User user = userService.findByUsername(jwt.getUsername(jwtToken))
-            if (!jwtToken || user?.type != authenticationAnnotation.type()) {
-                throw new AuthenticationException('User cannot access')
+            if (!jwtToken || user?.type != method.getAnnotation(AuthenticationAnnotation).type()) {
+                throw new AuthenticationException(ErrorMsgConstants.AUTH_NO_ACCESS)
             }
         }
         return joinPoint.proceed()
