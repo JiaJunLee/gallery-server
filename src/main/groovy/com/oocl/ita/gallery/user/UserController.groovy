@@ -52,7 +52,7 @@ class UserController {
             throw new AuthenticationException(ErrorMsgConstants.AUTH_NOT_FOUND_USER)
         }
 
-        if (!HMAC.validate(user.password, user?.hsKey, HMAC.HMAC_SHA512, user?.password)) {
+        if (!HMAC.validate(user.password, userDB?.hsKey, HMAC.HMAC_SHA512, userDB?.password)) {
             throw new AuthenticationException(ErrorMsgConstants.AUTH_FAIL)
         }
 
