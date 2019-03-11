@@ -22,7 +22,7 @@ class FileService extends BaseService<ImageFile, String> {
 
     @Override
     PagingAndSortingRepository<ImageFile, String> getRepository() {
-        return fileRepository;
+        return fileRepository
     }
 
     ImageFile saveFile(String fileId, MultipartFile file) {
