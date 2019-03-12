@@ -58,7 +58,7 @@ class FileServiceTest extends Specification {
         }
 
         when:
-        ImageFile imageFile = fileService.ConstructImageFile("123456", file)
+        ImageFile imageFile = fileService.constructImageFile("123456", file)
 
         then:
         imageFile != null

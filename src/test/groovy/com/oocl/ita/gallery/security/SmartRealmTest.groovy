@@ -17,8 +17,8 @@ class SmartRealmTest {
     @InjectMocks
     private SmartRealm smartRealm = new SmartRealm()
 
-    @Mock
-    private JWT jwt
+//    @Mock
+//    private JWT jwt
 
     @Mock
     private UserService userService
@@ -76,18 +76,17 @@ class SmartRealmTest {
         Assert.assertNull(info)
     }
 
-    @Ignore
+    @Test(expected = org.apache.shiro.authc.AuthenticationException.class)
     void should_throw_token_AUTH_TOKEN_UNRECOGNIZED_when_doGetAuthenticationInfo_given_token_abc() {
-        //When
+        //Given
         String tokenStr = "abc"
         Token token = new Token(token: tokenStr)
-
-        //Then
-        thrown.expect(AuthenticationException.class)
-        thrown.expectMessage(ErrorMsgConstants.AUTH_TOKEN_UNRECOGNIZED)
 
         //When
         smartRealm.doGetAuthenticationInfo(token)
 
+        //Then
+        //thrown.expect(AuthenticationException.class)
+        //thrown.expectMessage(ErrorMsgConstants.AUTH_TOKEN_UNRECOGNIZED)
     }
 }
