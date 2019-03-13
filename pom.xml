@@ -165,7 +165,9 @@
                 <configuration>
                     <forkCount>3</forkCount>
                     <reuseForks>true</reuseForks>
+                    <forkMode>once</forkMode>
                     <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
         </plugins>
