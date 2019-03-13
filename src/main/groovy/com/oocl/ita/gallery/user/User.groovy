@@ -31,11 +31,11 @@ class User extends BaseDocument{
     String type
 
     boolean isAdministrator() {
-        return this.type == UserType.ADMINISTRATOR.type
+        return this.type == UserType.ADMINISTRATOR
     }
 
     boolean isPublic() {
-        return this.type == UserType.PUBLIC.type
+        return this.type == UserType.PUBLIC
     }
 
 }
