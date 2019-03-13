@@ -22,14 +22,14 @@ class FileService extends BaseService<ImageFile, String> {
 
     @Override
     PagingAndSortingRepository<ImageFile, String> getRepository() {
-        return fileRepository;
+        return fileRepository
     }
 
     ImageFile saveFile(String fileId, MultipartFile file) {
-        return save(ConstructImageFile(fileId, file))
+        return save(constructImageFile(fileId, file))
     }
 
-    private ImageFile ConstructImageFile(String fileId, MultipartFile file) {
+    private ImageFile constructImageFile(String fileId, MultipartFile file) {
         new ImageFile(
                 id: fileId,
                 fileName: System.currentTimeMillis().toString() + file.getOriginalFilename(),
