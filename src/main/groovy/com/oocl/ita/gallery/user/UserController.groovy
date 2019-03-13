@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Controller
 @RequestMapping('/user')
+@CrossOrigin(value = "http://localhost:8080", allowCredentials = "true")
 class UserController {
 
     @Autowired
@@ -64,6 +66,6 @@ class UserController {
         cookie.setMaxAge(JWT.TOKEN_EXPIRE_TIME)
         httpServletResponse.addCookie(cookie)
 
-        return new ResponseEntity<String>(MsgConstants.USER_LOGIN, HttpStatus.OK)
+        return new ResponseEntity<Map>([id: userDB.id, username: userDB.username], HttpStatus.OK)
     }
 }

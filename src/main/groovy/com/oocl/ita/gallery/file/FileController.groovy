@@ -15,7 +15,8 @@ import org.springframework.web.multipart.MultipartFile
  *
  */
 @Controller
-@RequestMapping('/file')
+@RequestMapping('/files')
+@CrossOrigin(value = "http://localhost:8080", allowCredentials = "true")
 class FileController {
 
     @Autowired
