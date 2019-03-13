@@ -3,6 +3,7 @@ package groovy.com.oocl.ita.gallery.file
 import com.oocl.ita.gallery.file.FileRepository
 import com.oocl.ita.gallery.file.FileService
 import com.oocl.ita.gallery.file.ImageFile
+import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
@@ -13,32 +14,30 @@ import spock.lang.Specification
  */
 class FileServiceTest extends Specification {
 
-    static FileService fileService
-    static FileRepository fileRepository
-    MultipartFile file
+    FileService fileService
+    FileRepository fileRepository
 
     def setup() {
         fileRepository = Mock(FileRepository)
-        file = Mock()
-    }
-
-    def 'should return not null when getRepository'() {
-        given:
         fileService = new FileService(
                 fileRepository: fileRepository
         )
+    }
 
-        expect:
-        fileService.getRepository() != null
+    def 'should return not null when getRepository'() {
+        when:
+        PagingAndSortingRepository repository = fileService.getRepository()
+
+        then:
+        repository != null
     }
 
     def 'should return imageFile not null when saveFile'() {
         given:
-        ImageFile input = new ImageFile()
-        ImageFile output = new ImageFile()
         fileService = Stub(FileService) {
-            save(input) >> output
+            save(new ImageFile()) >> new ImageFile()
         }
+        MultipartFile file = Mock(MultipartFile)
 
         when:
         ImageFile imageFile = fileService.saveFile("123456", file)
@@ -50,7 +49,7 @@ class FileServiceTest extends Specification {
     def 'should return imageFile when ConstructImageFile given MultipartFile file'() {
         given:
         byte[] bytes = [200000]
-        file = Stub(MultipartFile) {
+        MultipartFile file = Stub(MultipartFile) {
             getOriginalFilename() >> "abc.jpg"
             getContentType() >> "img"
             getSize() >> Long.valueOf("1000")
