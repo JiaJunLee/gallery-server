@@ -3,7 +3,6 @@ package groovy.com.oocl.ita.gallery.file
 import com.oocl.ita.gallery.file.FileRepository
 import com.oocl.ita.gallery.file.FileService
 import com.oocl.ita.gallery.file.ImageFile
-import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
@@ -25,11 +24,8 @@ class FileServiceTest extends Specification {
     }
 
     def 'should return not null when getRepository'() {
-        when:
-        PagingAndSortingRepository repository = fileService.getRepository()
-
-        then:
-        repository != null
+        expect:
+        fileService.getRepository() != null
     }
 
     def 'should return imageFile not null when saveFile'() {
@@ -39,30 +35,31 @@ class FileServiceTest extends Specification {
         }
         MultipartFile file = Mock(MultipartFile)
 
-        when:
-        ImageFile imageFile = fileService.saveFile("123456", file)
-
-        then:
-        imageFile != null
+        expect:
+        fileService.saveFile("123456", file) != null
     }
 
     def 'should return imageFile when ConstructImageFile given MultipartFile file'() {
         given:
         byte[] bytes = [200000]
+        String filename = "abc.jpg"
+        String size = "1000"
+        String fileId = "123456"
+        String type = "image"
         MultipartFile file = Stub(MultipartFile) {
-            getOriginalFilename() >> "abc.jpg"
-            getContentType() >> "img"
-            getSize() >> Long.valueOf("1000")
+            getOriginalFilename() >> filename
+            getContentType() >> type
+            getSize() >> Long.valueOf(size)
             getBytes() >> bytes
         }
 
         when:
-        ImageFile imageFile = fileService.constructImageFile("123456", file)
+        ImageFile imageFile = fileService.constructImageFile(fileId, file)
 
         then:
         imageFile != null
-        imageFile.getId() == "123456"
-        imageFile.getFileSize() == "1000"
+        imageFile.getId() == fileId
+        imageFile.getFileSize() == size
     }
 
 
