@@ -158,18 +158,16 @@
                 <!--</configuration>-->
             <!--</plugin>-->
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
-                <configuration>
-                    <forkCount>3</forkCount>
-                    <reuseForks>true</reuseForks>
-                    <forkMode>once</forkMode>
-                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
-                    <testFailureIgnore>true</testFailureIgnore>
-                </configuration>
-            </plugin>
+        <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>2.18.1</version>
+                            <configuration>
+                                <forkMode>once</forkMode>
+                                <argLine>-Dfile.encoding=UTF-8 -Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=256m</argLine>
+                            </configuration>
+                        </plugin>
         </plugins>
     </build>
 
