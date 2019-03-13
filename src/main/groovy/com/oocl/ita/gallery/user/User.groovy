@@ -7,9 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document('user')
 class User extends BaseDocument{
 
-    static final enum UserType {
-        ADMINISTRATOR,
-        PUBLIC
+     static final class UserType {
+         static final String ADMINISTRATOR = "ADMINISTRATOR"
+         static final String PUBLIC = "PUBLIC"
     }
 
     @Field('username')
@@ -28,14 +28,14 @@ class User extends BaseDocument{
     Integer gender = 0
 
     @Field('type')
-    UserType type
+    String type
 
     boolean isAdministrator() {
-        return this.type == UserType.ADMINISTRATOR
+        return this.type == UserType.ADMINISTRATOR.type
     }
 
     boolean isPublic() {
-        return this.type == UserType.PUBLIC
+        return this.type == UserType.PUBLIC.type
     }
 
 }

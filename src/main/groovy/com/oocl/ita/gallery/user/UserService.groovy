@@ -18,7 +18,7 @@ class UserService extends BaseService<User, String> {
         return this.userRepository
     }
 
-    List<User> findAllByType(User.UserType type) {
+    List<User> findAllByType(String type) {
         return userRepository.findAllByType(type)
     }
 

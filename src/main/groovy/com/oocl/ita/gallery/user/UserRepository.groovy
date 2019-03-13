@@ -8,6 +8,6 @@ interface UserRepository extends PagingAndSortingRepository<User, String> {
 
     User findByUsername(String username)
 
-    List<User> findAllByType(User.UserType type)
+    List<User> findAllByType(String type)
 
 }
