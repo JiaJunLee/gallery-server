@@ -1,5 +1,10 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+    id 'groovy'
+    id 'idea'
+    id "org.springframework.boot" version "2.0.0.RELEASE"
+    id "org.apache.tomcat.maven" version "2.2"
+    id 'war'
+}
 
 group = 'com.oocl.ita'
 version = '0.0.1-SNAPSHOT'
