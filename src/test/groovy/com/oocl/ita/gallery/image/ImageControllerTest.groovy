@@ -1,5 +1,8 @@
 package com.oocl.ita.gallery.image
 
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
@@ -40,17 +43,18 @@ class ImageControllerTest extends Specification {
         response.getStatusCode() == HttpStatus.NOT_FOUND
     }
 
-    def 'should return success when get all given image id'() {
+    def 'should return pages when get given pageIndex and pageSize'() {
         given:
         List<Image> images = [new Image()]
-        imageService.findAll() >> images
+        Pageable pageable = new PageRequest(0, 30)
+        imageService.findAll(pageable) >> new PageImpl<Image>(images)
 
         when:
-        ResponseEntity<List<Image>> response = imageController.getAll()
+        ResponseEntity<Map> response = imageController.get(0, 30)
 
         then:
         response.getStatusCode() == HttpStatus.OK
-        response.getBody().size() == 1
+        response.getBody().get("images").size() == 1
     }
 
     def 'should return success when save given image'() {
