@@ -22,4 +22,8 @@ class ImageService extends BaseService<Image, String> {
         return this.imageRepository
     }
 
+    List<Image> findAllByTagsLike(List<String> tags) {
+        return this.imageRepository.findAllByTagsLike(tags)
+    }
+
 }

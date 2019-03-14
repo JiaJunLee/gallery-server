@@ -1,5 +1,7 @@
 package com.oocl.ita.gallery.common
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.PagingAndSortingRepository
 
 /**
@@ -55,6 +57,10 @@ abstract class BaseService<T, ID> {
 
     Iterable<T> findAll() {
         return getRepository().findAll()
+    }
+
+    Page<T> findAll(Pageable pageable) {
+        return getRepository().findAll(pageable)
     }
 
 }
