@@ -2,10 +2,16 @@ package com.oocl.ita.gallery.image
 
 import com.oocl.ita.gallery.api_versions.ApiVersion
 import com.oocl.ita.gallery.api_versions.ApiVersions
+import com.oocl.ita.gallery.file.FileService
+import com.oocl.ita.gallery.file.ImageFile
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.util.Base64Utils
 import org.springframework.web.bind.annotation.*
+
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
 
 /**
  *
@@ -17,10 +23,14 @@ import org.springframework.web.bind.annotation.*
  */
 @RestController
 @RequestMapping('/images')
+@CrossOrigin(value = "http://localhost:8080", allowCredentials = "true")
 class ImageController {
 
     @Autowired
     ImageService imageService
+
+    @Autowired
+    FileService fileService
 
     @GetMapping('/{image_id}')
     @ApiVersion(ApiVersions.VERSION_1)
@@ -41,6 +51,12 @@ class ImageController {
     @PostMapping
     @ApiVersion(ApiVersions.VERSION_1)
     ResponseEntity<Image> save(@RequestBody Image image) {
+        if (image?.imageFile?.id) {
+            ImageFile imageFile = fileService.findById(image.imageFile.id)
+            BufferedImage bufferedImage = ImageIO.read(new BufferedInputStream(new ByteArrayInputStream(Base64Utils.decodeFromString(imageFile?.fileContent))))
+            image.imageWidth = bufferedImage.getWidth()
+            image.imageHeight = bufferedImage.getHeight()
+        }
         return new ResponseEntity<Image>(imageService.save(image), HttpStatus.CREATED)
     }
 

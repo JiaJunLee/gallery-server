@@ -38,7 +38,7 @@ class SmartRealm extends AuthorizingRealm{
             throw new AuthenticationException(ErrorMsgConstants.AUTH_NOT_FOUND_USER)
         }
 
-        if (! jwt.verify(jwtToken, ['id': user?.id, 'username': user?.username, 'hsKey': user?.hsKey, 'Password': user?.password])) {
+        if (! jwt.verify(jwtToken, ['id': user?.id, 'username': user?.username, 'hsKey': user?.hsKey, 'hsPassword': user?.password])) {
             throw new AuthenticationException(ErrorMsgConstants.AUTH_FAIL)
         }
 

@@ -12,16 +12,17 @@ class AuthenticationFilter extends BasicHttpAuthenticationFilter {
     private static final List<String> IGNORE_PATH = [
             '/user/register',
             '/user/login',
-            '/user/denied'
+            '/user/denied',
+            '/v1/images'
     ]
 
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-        if (IGNORE_PATH.contains(((HttpServletRequest)request).getServletPath())) {
-            return true
-        } else {
-            getSubject(request, response).login(new Token(token: ((HttpServletRequest) request)?.getCookies()?.find { it?.name == 'token' }?.value))
-        }
+//        if (IGNORE_PATH.contains(((HttpServletRequest)request).getServletPath()) || ((HttpServletRequest)request).getMethod() == 'OPTIONS') {
+//            return true
+//        } else {
+//            getSubject(request, response).login(new Token(token: ((HttpServletRequest) request)?.getCookies()?.find { it?.name == 'token' }?.value))
+//        }
         return true
     }
 
