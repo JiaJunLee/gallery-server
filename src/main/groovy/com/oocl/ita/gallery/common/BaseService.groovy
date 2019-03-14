@@ -1,6 +1,5 @@
 package com.oocl.ita.gallery.common
 
-import com.oocl.ita.gallery.common.exception.GalleryRunTimeException
 import org.springframework.data.repository.PagingAndSortingRepository
 
 /**
@@ -41,23 +40,17 @@ abstract class BaseService<T, ID> {
     }
 
     boolean deleteById(ID id) {
-        try {
-            getRepository().deleteById(id)
-            return true
-        } catch (Exception e) {
-            throw new GalleryRunTimeException(e)
-        }
-        return false
+
+        getRepository().deleteById(id)
+        return true
+
     }
 
     boolean deleteAll(List<ID> ids) {
-        try {
-            ids.each { getRepository().deleteById(it) }
-            return true
-        } catch (Exception e) {
-            throw new GalleryRunTimeException(e)
-        }
-        return false
+
+        ids.each { getRepository().deleteById(it) }
+        return true
+
     }
 
     Iterable<T> findAll() {
