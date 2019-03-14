@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class FileControllerWithSpockTest extends Specification {
+class FileControllerTest extends Specification {
 
     FileController fileController
     FileService fileService
