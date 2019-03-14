@@ -1,7 +1,6 @@
 package com.oocl.ita.gallery.user
 
 import com.oocl.ita.gallery.common.constants.ErrorMsgConstants
-import com.oocl.ita.gallery.common.constants.MsgConstants
 import com.oocl.ita.gallery.security.AuthenticationException
 import com.oocl.ita.gallery.security.utils.HMAC
 import com.oocl.ita.gallery.security.utils.JWT
