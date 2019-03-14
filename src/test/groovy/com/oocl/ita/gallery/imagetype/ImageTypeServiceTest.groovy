@@ -1,4 +1,4 @@
-package groovy.com.oocl.ita.gallery.imagetype
+package com.oocl.ita.gallery.imagetype
 
 import com.oocl.ita.gallery.imagetype.ImageTypeRepository
 import com.oocl.ita.gallery.imagetype.ImageTypeService
@@ -19,8 +19,10 @@ class ImageTypeServiceTest extends Specification{
         imageTypeService = new ImageTypeService(
                 imageTypeRepository: imageTypeRepository
         )
+        when:
+        imageTypeService.getRepository()
 
-        expect:
+        then:
         imageTypeService.getRepository() != null
     }
 
