@@ -1,8 +1,8 @@
 package com.oocl.ita.gallery.user
 
 import com.oocl.ita.gallery.common.constants.ErrorMsgConstants
-import com.oocl.ita.gallery.common.constants.MsgConstants
 import com.oocl.ita.gallery.security.AuthenticationException
+import com.oocl.ita.gallery.security.AuthenticationIgnore
 import com.oocl.ita.gallery.security.utils.HMAC
 import com.oocl.ita.gallery.security.utils.JWT
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse
 
 @Controller
 @RequestMapping('/user')
-@CrossOrigin(value = "http://localhost:8080", allowCredentials = "true")
 class UserController {
 
     @Autowired
@@ -29,11 +28,13 @@ class UserController {
     UserService userService
 
     @RequestMapping('/denied')
+    @AuthenticationIgnore
     ResponseEntity denied() {
         return new ResponseEntity<String>(ErrorMsgConstants.AUTH_DENIED, HttpStatus.UNAUTHORIZED)
     }
 
     @PostMapping("/register")
+    @AuthenticationIgnore
     ResponseEntity register(@RequestBody User user) {
         String hsKey = HMAC.generateKey(HMAC.HMAC_SHA512)
         User userDB = new User(
@@ -48,6 +49,7 @@ class UserController {
     }
 
     @PostMapping("/login")
+    @AuthenticationIgnore
     ResponseEntity login(@RequestBody User user, HttpServletResponse httpServletResponse) {
         User userDB = userService.findByUsername(user.username)
         if (userDB == null) {

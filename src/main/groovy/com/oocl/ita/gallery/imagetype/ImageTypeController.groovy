@@ -2,10 +2,12 @@ package com.oocl.ita.gallery.imagetype
 
 import com.oocl.ita.gallery.api_versions.ApiVersion
 import com.oocl.ita.gallery.api_versions.ApiVersions
+import com.oocl.ita.gallery.security.AuthenticationIgnore
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping('/imageTypes')
+@RequestMapping('/image-types')
 class ImageTypeController {
 
     @Autowired ImageTypeService imageTypeService
@@ -49,6 +51,7 @@ class ImageTypeController {
 
     @GetMapping
     @ApiVersion(ApiVersions.VERSION_1)
+    @AuthenticationIgnore
     ResponseEntity<List<ImageType>> getAll() {
         return new ResponseEntity<List<ImageType>>(imageTypeService.findAll().toList(), HttpStatus.OK)
     }

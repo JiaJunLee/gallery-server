@@ -2,6 +2,7 @@ package com.oocl.ita.gallery.file
 
 import com.oocl.ita.gallery.api_versions.ApiVersion
 import com.oocl.ita.gallery.api_versions.ApiVersions
+import com.oocl.ita.gallery.security.AuthenticationIgnore
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile
  */
 @Controller
 @RequestMapping('/files')
-@CrossOrigin(value = "http://localhost:8080", allowCredentials = "true")
 class FileController {
 
     @Autowired
@@ -40,6 +40,7 @@ class FileController {
 
     @PostMapping
     @ApiVersion(ApiVersions.VERSION_1)
+    @AuthenticationIgnore
     ResponseEntity<ImageFile> save(@RequestParam("file") MultipartFile file) {
         return new ResponseEntity<ImageFile>(fileService.saveFile(null, file), HttpStatus.CREATED)
     }

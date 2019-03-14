@@ -2,6 +2,7 @@ package com.oocl.ita.gallery.image
 
 import com.oocl.ita.gallery.common.BaseDocument
 import com.oocl.ita.gallery.file.ImageFile
+import com.oocl.ita.gallery.imagetype.ImageType
 import com.oocl.ita.gallery.user.User
 import org.springframework.data.mongodb.core.mapping.DBRef
 import org.springframework.data.mongodb.core.mapping.Document
@@ -37,5 +38,9 @@ class Image extends BaseDocument {
     @DBRef
     @Field('image_file')
     ImageFile imageFile
+
+    @DBRef
+    @Field("image_type")
+    ImageType imageType
 
 }

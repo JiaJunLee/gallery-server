@@ -4,7 +4,11 @@ import com.oocl.ita.gallery.api_versions.ApiVersion
 import com.oocl.ita.gallery.api_versions.ApiVersions
 import com.oocl.ita.gallery.file.FileService
 import com.oocl.ita.gallery.file.ImageFile
+import com.oocl.ita.gallery.imagetype.ImageTypeService
+import com.oocl.ita.gallery.security.AuthenticationIgnore
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.util.Base64Utils
@@ -23,7 +27,6 @@ import java.awt.image.BufferedImage
  */
 @RestController
 @RequestMapping('/images')
-@CrossOrigin(value = "http://localhost:8080", allowCredentials = "true")
 class ImageController {
 
     @Autowired
@@ -32,8 +35,12 @@ class ImageController {
     @Autowired
     FileService fileService
 
+    @Autowired
+    ImageTypeService imageTypeService
+
     @GetMapping('/{image_id}')
     @ApiVersion(ApiVersions.VERSION_1)
+    @AuthenticationIgnore
     ResponseEntity<Image> get(@PathVariable('image_id') String imageId) {
         Image image = imageService.findById(imageId)
         if (image == null) {
@@ -44,8 +51,21 @@ class ImageController {
 
     @GetMapping
     @ApiVersion(ApiVersions.VERSION_1)
-    ResponseEntity<List<Image>> getAll() {
-        return new ResponseEntity<List<Image>>(imageService.findAll().toList(), HttpStatus.OK)
+    @AuthenticationIgnore
+    ResponseEntity<Map> get(@RequestParam(value = "pageIndex", defaultValue = "0") int pageIndex, @RequestParam(value = "pageSize", defaultValue = "30") int pageSize) {
+        Page<Image> imagePage = imageService.findAll(new PageRequest(pageIndex, pageSize))
+        return new ResponseEntity<Map>([
+                images: imagePage.getContent(),
+                total: imagePage.getTotalElements(),
+                currentPageIndex: imagePage.getNumber()
+        ], HttpStatus.OK)
+    }
+
+    @GetMapping('/search')
+    @ApiVersion(ApiVersions.VERSION_1)
+    @AuthenticationIgnore
+    ResponseEntity<List<Image>> search(@RequestParam(value = "tags", defaultValue = "") String tags) {
+        return new ResponseEntity<List<Image>>(imageService.findAllByTagsLike(tags.split(' ').toList()), HttpStatus.OK)
     }
 
     @PostMapping
@@ -57,6 +77,9 @@ class ImageController {
             image.imageWidth = bufferedImage.getWidth()
             image.imageHeight = bufferedImage.getHeight()
         }
+        if (image?.imageType?.typeName) {
+            image.imageType = imageTypeService.findByTypeName(image?.imageType?.typeName)
+        }
         return new ResponseEntity<Image>(imageService.save(image), HttpStatus.CREATED)
     }
 
@@ -65,6 +88,9 @@ class ImageController {
     ResponseEntity<Image> update(@RequestBody Image image) {
         if (!imageService.isExists(image?.id)) {
             return new ResponseEntity<Image>(HttpStatus.NOT_FOUND)
+        }
+        if (image?.imageType?.typeName) {
+            image.imageType = imageTypeService.findByTypeName(image?.imageType?.typeName)
         }
         return new ResponseEntity<Image>(imageService.save(image), HttpStatus.RESET_CONTENT)
     }

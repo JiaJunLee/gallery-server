@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 interface ImageRepository extends PagingAndSortingRepository<Image, String> {
 
+    List<Image> findAllByTagsLike(List<String> tags)
+
 }
