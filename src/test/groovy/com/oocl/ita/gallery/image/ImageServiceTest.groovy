@@ -6,9 +6,11 @@ import spock.lang.Specification
 class ImageServiceTest extends Specification{
 
     static ImageService imageService
+    ImageRepository imageRepository
 
     void setup() {
-        imageService = new ImageService(imageRepository:  Mock(ImageRepository.class))
+        imageRepository = Mock(ImageRepository.class)
+        imageService = new ImageService(imageRepository:  imageRepository)
     }
 
     def 'should return imageRepository when getRepository'() {
@@ -17,5 +19,18 @@ class ImageServiceTest extends Specification{
 
         then:
         repository != null
+    }
+
+    def 'should return image list size 2 when findAllByTagsLike given tags'() {
+        given:
+        List<String> tags = ['a']
+        imageRepository.findAllByTagsLike(tags) >> [new Image(),new Image()]
+
+        when:
+        List<Image> likes = imageService.findAllByTagsLike(tags)
+
+        then:
+        likes != null
+        likes.size() == 2
     }
 }
