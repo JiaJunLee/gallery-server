@@ -51,7 +51,7 @@ class FileServiceTest {
     }
 
     @Test
-    void should_return_user_null_when_findByUsername_given_user_name_a() {
+    void should_return_imageFile_when_constructImageFile_given_id_MultipartFile() {
         //Given
         suppress(MemberMatcher.methodsDeclaredIn(BaseService.class))
         String id = "v1"
