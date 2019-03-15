@@ -1,65 +1,67 @@
 package com.oocl.ita.gallery.file
 
-import com.oocl.ita.gallery.file.FileRepository
-import com.oocl.ita.gallery.file.FileService
-import com.oocl.ita.gallery.file.ImageFile
-import org.springframework.web.multipart.MultipartFile
-import spock.lang.Specification
+import com.oocl.ita.gallery.common.BaseService
+import com.oocl.ita.gallery.image.Image
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import org.powermock.api.support.membermodification.MemberMatcher
+import org.powermock.reflect.Whitebox
+import org.springframework.mock.web.MockMultipartFile
 
-/**
- *
- * Created by Justin Liu on 3/11/2019.
- *
- */
-class FileServiceTest extends Specification {
+import static org.powermock.api.support.membermodification.MemberModifier.suppress
 
-    FileService fileService
-    FileRepository fileRepository
+class FileServiceTest {
 
-    def setup() {
-        fileRepository = Mock(FileRepository)
-        fileService = new FileService(
-                fileRepository: fileRepository
-        )
+    @InjectMocks
+    private FileService fileService = new FileService()
+
+    @Mock
+    private FileRepository fileRepository
+
+
+    @Before
+    void setUp() {
+        MockitoAnnotations.initMocks(this)
     }
 
-    def 'should return not null when getRepository'() {
-        expect:
-        fileService.getRepository() != null
+    @Test
+    void should_return_fileRepository_when_getRepository() {
+        //When
+        FileRepository fileRepository1 = fileService.getRepository()
+
+        //Then
+        Assert.assertNotNull(fileRepository1)
     }
 
-    def 'should return imageFile not null when saveFile'() {
-        given:
-        fileService = Stub(FileService) {
-            save(new ImageFile()) >> new ImageFile()
-        }
-        MultipartFile file = Mock(MultipartFile)
 
-        expect:
-        fileService.saveFile("123456", file) != null
+    @Test
+    void should_return_image_null_when_saveFile_mock_save() {
+        //Given
+        suppress(MemberMatcher.methodsDeclaredIn(BaseService.class))
+
+        //When
+        Image image = fileService.saveFile("id1",new MockMultipartFile("aa","aa".getBytes()))
+
+        //Then
+        Assert.assertNull(image)
     }
 
-    def 'should return imageFile when ConstructImageFile given MultipartFile file'() {
-        given:
-        byte[] bytes = [200000]
-        String filename = "abc.jpg"
-        String size = "1000"
-        String fileId = "123456"
-        String type = "image"
-        MultipartFile file = Stub(MultipartFile) {
-            getOriginalFilename() >> filename
-            getContentType() >> type
-            getSize() >> Long.valueOf(size)
-            getBytes() >> bytes
-        }
+    @Test
+    void should_return_user_null_when_findByUsername_given_user_name_a() {
+        //Given
+        suppress(MemberMatcher.methodsDeclaredIn(BaseService.class))
+        String id = "v1"
 
-        when:
-        ImageFile imageFile = fileService.constructImageFile(fileId, file)
+        //When
+        ImageFile image = (ImageFile)Whitebox.invokeMethod(fileService,"constructImageFile",id,new MockMultipartFile("aa","aa".getBytes()))
 
-        then:
-        imageFile != null
-        imageFile.getId() == fileId
-        imageFile.getFileSize() == size
+        //Then
+        Assert.assertNotNull(image)
+        Assert.assertEquals(id,image.id)
     }
 
 
