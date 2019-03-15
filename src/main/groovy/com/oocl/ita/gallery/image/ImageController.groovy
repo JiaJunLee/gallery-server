@@ -9,6 +9,7 @@ import com.oocl.ita.gallery.security.AuthenticationIgnore
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.util.Base64Utils
@@ -52,20 +53,21 @@ class ImageController {
     @GetMapping
     @ApiVersion(ApiVersions.VERSION_1)
     @AuthenticationIgnore
-    ResponseEntity<Map> get(@RequestParam(value = "pageIndex", defaultValue = "0") int pageIndex, @RequestParam(value = "pageSize", defaultValue = "30") int pageSize) {
-        Page<Image> imagePage = imageService.findAll(new PageRequest(pageIndex, pageSize))
+    ResponseEntity<Map> get(
+            @RequestParam(value = "pageIndex", defaultValue = "0") int pageIndex,
+            @RequestParam(value = "pageSize", defaultValue = "30") int pageSize, String tags) {
+        Pageable pageable = new PageRequest(pageIndex, pageSize)
+        Page<Image> imagePage = null
+        if (tags) {
+            imagePage = imageService.findAllByTagsLike(tags.split(' ').toList(), pageable)
+        } else {
+            imagePage = imageService.findAll(pageable)
+        }
         return new ResponseEntity<Map>([
-                images: imagePage.getContent(),
-                total: imagePage.getTotalElements(),
-                currentPageIndex: imagePage.getNumber()
+                images          : imagePage?.getContent(),
+                total           : imagePage?.getTotalElements(),
+                currentPageIndex: imagePage?.getNumber()
         ], HttpStatus.OK)
-    }
-
-    @GetMapping('/search')
-    @ApiVersion(ApiVersions.VERSION_1)
-    @AuthenticationIgnore
-    ResponseEntity<List<Image>> search(@RequestParam(value = "tags", defaultValue = "") String tags) {
-        return new ResponseEntity<List<Image>>(imageService.findAllByTagsLike(tags.split(' ').toList()), HttpStatus.OK)
     }
 
     @PostMapping

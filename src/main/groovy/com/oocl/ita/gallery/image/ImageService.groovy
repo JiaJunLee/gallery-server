@@ -2,6 +2,8 @@ package com.oocl.ita.gallery.image
 
 import com.oocl.ita.gallery.common.BaseService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Service;
 /**
@@ -22,8 +24,8 @@ class ImageService extends BaseService<Image, String> {
         return this.imageRepository
     }
 
-    List<Image> findAllByTagsLike(List<String> tags) {
-        return this.imageRepository.findAllByTagsLike(tags)
+    Page<Image> findAllByTagsLike(List<String> tags, Pageable pageable) {
+        return this.imageRepository.findAllByTagsLike(tags, pageable)
     }
 
 }

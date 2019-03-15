@@ -50,7 +50,21 @@ class ImageControllerTest extends Specification {
         imageService.findAll(pageable) >> new PageImpl<Image>(images)
 
         when:
-        ResponseEntity<Map> response = imageController.get(0, 30)
+        ResponseEntity<Map> response = imageController.get(0, 30, "")
+
+        then:
+        response.getStatusCode() == HttpStatus.OK
+        response.getBody().get("images").size() == 1
+    }
+
+    def 'should return pages when get given pageIndex and pageSize and tags'() {
+        given:
+        List<Image> images = [new Image(tags: ['tag'])]
+        Pageable pageable = new PageRequest(0, 30)
+        imageService.findAllByTagsLike(['tag'], pageable) >> new PageImpl<Image>(images)
+
+        when:
+        ResponseEntity<Map> response = imageController.get(0, 30, "tag")
 
         then:
         response.getStatusCode() == HttpStatus.OK
