@@ -1,4 +1,4 @@
-package groovy.com.oocl.ita.gallery.file
+package com.oocl.ita.gallery.file
 
 import com.oocl.ita.gallery.file.FileRepository
 import com.oocl.ita.gallery.file.FileService
