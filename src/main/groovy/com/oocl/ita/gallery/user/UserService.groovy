@@ -28,11 +28,10 @@ class UserService extends BaseService<User, String> {
 
     User createUser(User user) {
         if (userRepository.findByUsername(user.username) == null) {
-            this.save(user)
+            return this.save(user)
         } else {
             throw new DuplicatedUserException(ErrorMsgConstants.REG_FAIL_CONFLICT_USERNAME)
         }
-        return user
     }
 
 

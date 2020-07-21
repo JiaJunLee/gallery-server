@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 
 @Document('user')
-class User extends BaseDocument{
+class User extends BaseDocument implements Serializable {
 
      static final class UserType {
          static final String ADMINISTRATOR = "ADMINISTRATOR"
@@ -29,6 +29,12 @@ class User extends BaseDocument{
 
     @Field('type')
     String type
+
+    @Field('email')
+    String email
+
+    @Field('active')
+    boolean active
 
     boolean isAdministrator() {
         return this.type == UserType.ADMINISTRATOR
